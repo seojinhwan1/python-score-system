@@ -6,10 +6,10 @@ def get_db():
 def show_all():
     conn = get_db()
     with conn.cursor() as cursor:
-        sql = "SELECT m.name, g.subject, g.score, g.seq FROM member m JOIN grades g ON m.seq = g.member_seq"
+        sql = "SELECT m.name, g.subject, g.score, g.id_grade FROM member m JOIN grades g ON m.seq = g.member_seq"
         cursor.execute(sql)
         for row in cursor.fetchall():
-            print(f"번호:{row['seq']} | 학생:{row['name']} | 과목:{row['subject']} | 점수:{row['score']}")
+            print(f"번호:{row['id_grade']} | 학생:{row['name']} | 과목:{row['subject']} | 점수:{row['score']}")
     conn.close()
 
 def add_score():
@@ -29,7 +29,7 @@ def update_score():
     score = input("새 점수: ")
     conn = get_db()
     with conn.cursor() as cursor:
-        sql = "UPDATE grades SET score = %s WHERE seq = %s"
+        sql = "UPDATE grades SET score = %s WHERE id_grade = %s"
         cursor.execute(sql, (score, g_seq))
     conn.commit()
     conn.close()
@@ -39,7 +39,7 @@ def delete_score():
     g_seq = input("삭제할 성적 번호(seq): ")
     conn = get_db()
     with conn.cursor() as cursor:
-        sql = "DELETE FROM grades WHERE seq = %s"
+        sql = "DELETE FROM grades WHERE id_grade = %s"
         cursor.execute(sql, (g_seq,))
     conn.commit()
     conn.close()
